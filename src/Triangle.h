@@ -1,6 +1,7 @@
 #ifndef MYENGINE_TRIANGLE_H
 #define MYENGINE_TRIANGLE_H
 #include "glad/glad.h"
+#include <glm/glm.hpp>
 
 static const GLfloat g_vertex_buffer_data[] = {
     -1.0f, -1.0f, 0.0f,
@@ -11,16 +12,12 @@ static const GLfloat g_vertex_buffer_data[] = {
 class Triangle {
 private:
     GLuint vertexbuffer;
+    GLuint programID;
+    glm::mat4 modelMatrix;
 public:
-    Triangle() {
-        // Generate 1 buffer, put the resulting identifier in vertexbuffer
-        glGenBuffers(1, &vertexbuffer);
-        // The following commands will talk about our 'vertexbuffer' buffer
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        // Give our vertices to OpenGL.
-        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
-    }
-    void Draw();
+    Triangle(GLuint shaderProgram);
+    void Draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
+    void setModelMatrix(const glm::mat4& newModel);
 };
 
 
