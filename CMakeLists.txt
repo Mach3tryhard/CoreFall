@@ -29,10 +29,12 @@ add_executable(${PROJECT_NAME}
         src/glad.c
         src/LoadShader.cpp
         src/LoadShader.h
-        src/Triangle.cpp
-        src/Triangle.h
+        src/meshes/Triangle.cpp
+        src/meshes/Triangle.h
         src/Camera.cpp
         src/Camera.h
+        src/meshes/Cube.cpp
+        src/meshes/Cube.h
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE include)
