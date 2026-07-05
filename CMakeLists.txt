@@ -35,6 +35,10 @@ add_executable(${PROJECT_NAME}
         src/Camera.h
         src/meshes/Cube.cpp
         src/meshes/Cube.h
+        src/meshes/Tetrahedron.cpp
+        src/meshes/Tetrahedron.h
+        src/meshes/Icosahedron.cpp
+        src/meshes/Icosahedron.h
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE include)

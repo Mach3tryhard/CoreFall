@@ -1,7 +1,7 @@
 #include "Camera.h"
 
 Camera::Camera(int windowWidth, int windowHeight) {
-    position = glm::vec3(4.0f, 3.0f, 3.0f);
+    position = glm::vec3(3.0f, 3.0f, 3.0f);
     target   = glm::vec3(0.0f, 0.0f, 0.0f);
     up       = glm::vec3(0.0f, 1.0f, 0.0f);
 
