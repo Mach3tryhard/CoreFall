@@ -1,20 +1,15 @@
 #ifndef COREFALL_ICOSAHEDRON_H
 #define COREFALL_ICOSAHEDRON_H
 #include <glad/glad.h>
-#include <glm/glm.hpp>
+#include "Mesh.h"
 
-class Icosahedron {
-private:
-    GLuint vertexbuffer;
-    GLuint colorbuffer;
-    GLuint programID;
-    glm::mat4 modelMatrix;
-    int vertexCount;
+static GLfloat g_vertex_buffer_data_icosahedron[180];
 
+static GLfloat g_color_buffer_data_icosahedron[180];
+
+class Icosahedron: public Mesh{
 public:
     Icosahedron(GLuint shaderProgram);
-    void Draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
-    void setModelMatrix(const glm::mat4& newModel);
 };
 
 #endif //COREFALL_ICOSAHEDRON_H

@@ -1,12 +1,12 @@
 #ifndef COREFALL_CUBE_H
 #define COREFALL_CUBE_H
 #include "glad/glad.h"
-#include <glm/glm.hpp>
+#include "Mesh.h"
 
 static const GLfloat g_vertex_buffer_data_cube[] = {
-    -1.0f,-1.0f,-1.0f, // triangle 1 : begin
+    -1.0f,-1.0f,-1.0f,
     -1.0f,-1.0f, 1.0f,
-    -1.0f, 1.0f, 1.0f, // triangle 1 : end
+    -1.0f, 1.0f, 1.0f,
     1.0f, 1.0f,-1.0f,
     -1.0f,-1.0f,-1.0f,
     -1.0f, 1.0f,-1.0f,
@@ -81,16 +81,9 @@ static const GLfloat g_color_buffer_data_cube[] = {
     0.982f,  0.099f,  0.879f
 };
 
-class Cube {
-private:
-    GLuint vertexbuffer;
-    GLuint colorbuffer;
-    GLuint programID;
-    glm::mat4 modelMatrix;
+class Cube: public Mesh {
 public:
     Cube(GLuint shaderProgram);
-    void Draw(const glm::mat4& viewMatrix,const glm::mat4& projectionMatrix);
-    void setModelMatrix(const glm::mat4& newModel);
 };
 
 #endif //COREFALL_CUBE_H

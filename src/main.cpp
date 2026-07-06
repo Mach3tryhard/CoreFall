@@ -8,6 +8,8 @@
 #include "meshes/Triangle.h"
 #include "meshes/Tetrahedron.h"
 #include "meshes/Icosahedron.h"
+#include "meshes/Octahedron.h"
+#include "meshes/Sphere.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -45,8 +47,9 @@ int main() {
 
     Triangle triangle1(programID);
     Cube cube1(programID);
-    Tetrahedron d4(programID);
+    Octahedron d4(programID);
     Icosahedron d20(programID);
+    Sphere spehere1(programID);
     Camera mainCamera(1920, 1080);
 
     // Main Engine Loop
@@ -59,7 +62,7 @@ int main() {
         float timeValue = glfwGetTime();
 
         glm::mat4 newModel = glm::mat4(1.0f);
-        newModel = glm::translate(newModel, glm::vec3(-3.0f, 0.0f, 0.0f));
+        newModel = glm::translate(newModel, glm::vec3(0.0f, 0.0f, 0.0f));
         newModel = glm::rotate(newModel, timeValue, glm::vec3(0.0f, 0.0f, 1.0f));
 
         glm::mat4 newModel1 = glm::mat4(1.0f);
@@ -69,25 +72,27 @@ int main() {
         newModel2 = glm::rotate(newModel2, timeValue, glm::vec3(.0f, 0.0f, 1.0f));
 
         glm::mat4 newModel3 = glm::mat4(1.0f);
-        newModel3 = glm::translate(newModel3,glm::vec3(1.5f,1.5f,1.5f));
+        newModel3 = glm::translate(newModel3,glm::vec3(0.0f,0.0f,0.0f));
         newModel3 = glm::rotate(newModel3, timeValue, glm::vec3(.0f, 0.0f, 1.0f));
 
         glm::mat4 view = mainCamera.getViewMatrix();
         glm::mat4 projection = mainCamera.getProjectionMatrix();
 
-        d20.setModelMatrix(newModel3);
-        d20.Draw(view,projection);
+        //triangle1.setModelMatrix(newModel1);
+        //triangle1.Draw(view, projection);
 
-        /*
-        d4.setModelMatrix(newModel2);
-        d4.Draw(view,projection);
+        //d20.setModelMatrix(newModel3);
+        //d20.Draw(view,projection);
 
-        triangle1.setModelMatrix(newModel1);
-        triangle1.Draw(view, projection);
+        //d4.setModelMatrix(newModel2);
+        //d4.Draw(view,projection);
 
-        cube1.setModelMatrix(newModel);
-        cube1.Draw(view,projection);
-        */
+        spehere1.setModelMatrix(newModel3);
+        spehere1.Draw(view,projection);
+
+        //cube1.setModelMatrix(newModel);
+        //cube1.Draw(view,projection);
+
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

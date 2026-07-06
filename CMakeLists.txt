@@ -39,6 +39,12 @@ add_executable(${PROJECT_NAME}
         src/meshes/Tetrahedron.h
         src/meshes/Icosahedron.cpp
         src/meshes/Icosahedron.h
+        src/meshes/Mesh.cpp
+        src/meshes/Mesh.h
+        src/meshes/Octahedron.cpp
+        src/meshes/Octahedron.h
+        src/meshes/Sphere.cpp
+        src/meshes/Sphere.h
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE include)

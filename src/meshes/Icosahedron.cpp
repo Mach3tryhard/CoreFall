@@ -5,8 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 Icosahedron::Icosahedron(GLuint shaderProgram) {
-    programID = shaderProgram;
-    modelMatrix = glm::mat4(1.0f);
+    this->programID = shaderProgram;
 
     float t = (1.0f + std::sqrt(5.0f)) / 2.0f;
 
@@ -34,37 +33,18 @@ Icosahedron::Icosahedron(GLuint shaderProgram) {
         finalVertices.push_back(v.y);
         finalVertices.push_back(v.z);
     }
-    
-    vertexCount = 60;
+
+    for (int i=0;i<finalVertices.size();i++) {
+        g_vertex_buffer_data_icosahedron[i] = finalVertices.data()[i];
+        g_color_buffer_data_icosahedron[i] = finalVertices.data()[i];
+    }
+    this->vertexCount = 60;
 
     glGenBuffers(1, &vertexbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glBufferData(GL_ARRAY_BUFFER, finalVertices.size() * sizeof(float), finalVertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_icosahedron), g_vertex_buffer_data_icosahedron, GL_STATIC_DRAW);
 
     glGenBuffers(1, &colorbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-    glBufferData(GL_ARRAY_BUFFER, finalVertices.size() * sizeof(float), finalVertices.data(), GL_STATIC_DRAW);
-}
-
-void Icosahedron::Draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
-    glm::mat4 MVP = projectionMatrix * viewMatrix * modelMatrix;
-    GLuint MatrixID = glGetUniformLocation(programID, "MVP");
-    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, glm::value_ptr(MVP));
-
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-    glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-
-    glDisableVertexAttribArray(0);
-}
-
-void Icosahedron::setModelMatrix(const glm::mat4& newModel) {
-    modelMatrix = newModel;
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_icosahedron), g_color_buffer_data_icosahedron, GL_STATIC_DRAW);
 }
