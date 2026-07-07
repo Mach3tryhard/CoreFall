@@ -3,9 +3,8 @@
 #include <cmath>
 #include <glm/glm.hpp>
 
-Sphere::Sphere(GLuint shaderProgram, int sectors, int stacks) : Mesh(shaderProgram) {
-    this->programID = shaderProgram;
-    this->vertexCount = 648*100;
+Sphere::Sphere(std::shared_ptr<Material> mat, int sectors, int stacks) : Mesh(mat) {
+    this->programID = mat->getProgramID();
 
     std::vector<float> finalVertices;
     float radius = 1.0f;
@@ -34,9 +33,35 @@ Sphere::Sphere(GLuint shaderProgram, int sectors, int stacks) : Mesh(shaderProgr
         }
     }
 
+    this->vertexCount = finalVertices.size() / 3;
+
     glGenBuffers(1, &vertexbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
     glBufferData(GL_ARRAY_BUFFER, finalVertices.size() * sizeof(finalVertices[0]), finalVertices.data(), GL_STATIC_DRAW);
+
+    std::vector<float> finalUVs;
+
+    for (int i = 0; i < stacks; ++i) {
+        float v1 = float(i) / stacks;
+        float v2 = float(i + 1) / stacks;
+
+        for (int j = 0; j < sectors; ++j) {
+            float u1 = float(j) / sectors;
+            float u2 = float(j + 1) / sectors;
+
+            finalUVs.push_back(u1); finalUVs.push_back(v1);
+            finalUVs.push_back(u1); finalUVs.push_back(v2);
+            finalUVs.push_back(u2); finalUVs.push_back(v1);
+
+            finalUVs.push_back(u2); finalUVs.push_back(v1);
+            finalUVs.push_back(u1); finalUVs.push_back(v2);
+            finalUVs.push_back(u2); finalUVs.push_back(v2);
+        }
+    }
+
+    glGenBuffers(1, &uvbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+    glBufferData(GL_ARRAY_BUFFER, finalUVs.size() * sizeof(float), finalUVs.data(), GL_STATIC_DRAW);
 
     glGenBuffers(1, &colorbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);

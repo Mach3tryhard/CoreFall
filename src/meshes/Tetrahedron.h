@@ -34,9 +34,16 @@ static const GLfloat g_color_buffer_data_tetrahedron[] = {
     1.0f, -1.0f, -1.0f
 };
 
+static const GLfloat g_uv_buffer_data_tetrahedron[] = {
+ 0.0f, 0.0f,  1.0f, 0.0f,  0.5f, 1.0f,
+ 0.0f, 0.0f,  1.0f, 0.0f,  0.5f, 1.0f,
+ 0.0f, 0.0f,  1.0f, 0.0f,  0.5f, 1.0f,
+ 0.0f, 0.0f,  1.0f, 0.0f,  0.5f, 1.0f
+};
+
 class Tetrahedron: public Mesh {
 public:
-    Tetrahedron(GLuint shaderProgram);
+    Tetrahedron(std::shared_ptr<Material> mat);
 };
 
 #endif //COREFALL_TETRAHEDRON_H

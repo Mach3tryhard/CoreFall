@@ -1,6 +1,19 @@
 #version 330 core
+
 in vec3 fragmentColor;
-out vec4 color;
+in vec2 UV;
+
+out vec3 color;
+
+uniform sampler2D myTextureSampler;
+uniform bool useVertexColor;
+
 void main(){
-    color = vec4(fragmentColor,1.0);
+    vec3 textureColor = texture(myTextureSampler, UV).rgb;
+
+    if (useVertexColor) {
+        color = textureColor * fragmentColor;
+    } else {
+        color = textureColor;
+    }
 }

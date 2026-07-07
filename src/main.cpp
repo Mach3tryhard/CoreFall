@@ -3,6 +3,7 @@
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Camera.h"
+#include "Camera.h"
 #include "LoadShader.h"
 #include "meshes/Cube.h"
 #include "meshes/Triangle.h"
@@ -36,6 +37,8 @@ int main() {
         return -1;
     }
 
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
@@ -44,13 +47,15 @@ int main() {
     glBindVertexArray(VertexArrayID);
 
     GLuint programID = LoadShaders( "shaders/VertexShader.glsl", "shaders/FragmentShader.glsl" );
+    auto defaultMaterial = std::make_shared<Material>(programID, "textures/uv_texture.dds");
 
-    Triangle triangle1(programID);
-    Cube cube1(programID);
-    Octahedron d4(programID);
-    Icosahedron d20(programID);
-    Sphere spehere1(programID);
-    Camera mainCamera(1920, 1080);
+    Triangle triangle(defaultMaterial);
+    Cube cube(defaultMaterial);
+    Octahedron octahedron(defaultMaterial);
+    Icosahedron icosahedron(defaultMaterial);
+    Tetrahedron tetrahedron(defaultMaterial);
+    Sphere spehere1(defaultMaterial);
+    Camera camera(glm::vec3(10.0f, 0.0f, 10.0f));
 
     // Main Engine Loop
     while (!glfwWindowShouldClose(window)) {
@@ -61,37 +66,46 @@ int main() {
 
         float timeValue = glfwGetTime();
 
+        camera.computeMatricesFromInputs(window);
+        glm::mat4 view = camera.getViewMatrix();
+        glm::mat4 projection = camera.getProjectionMatrix();
+
         glm::mat4 newModel = glm::mat4(1.0f);
-        newModel = glm::translate(newModel, glm::vec3(0.0f, 0.0f, 0.0f));
-        newModel = glm::rotate(newModel, timeValue, glm::vec3(0.0f, 0.0f, 1.0f));
+        newModel = glm::translate(newModel, glm::vec3(0.0f, 0.0f, 1.0f));
 
         glm::mat4 newModel1 = glm::mat4(1.0f);
-        newModel1 = glm::rotate(newModel1, timeValue, glm::vec3(1.0f, 0.0f, 0.0f));
+        newModel1 = glm::translate(newModel1, glm::vec3(5.0f, 0.0f, 0.0f));
 
         glm::mat4 newModel2 = glm::mat4(1.0f);
-        newModel2 = glm::rotate(newModel2, timeValue, glm::vec3(.0f, 0.0f, 1.0f));
+        newModel2 = glm::translate(newModel2,  glm::vec3(10.0f, 0.0f, 1.0f));
 
         glm::mat4 newModel3 = glm::mat4(1.0f);
-        newModel3 = glm::translate(newModel3,glm::vec3(0.0f,0.0f,0.0f));
-        newModel3 = glm::rotate(newModel3, timeValue, glm::vec3(.0f, 0.0f, 1.0f));
+        newModel3 = glm::translate(newModel3,glm::vec3(15.0f,0.0f,0.0f));
 
-        glm::mat4 view = mainCamera.getViewMatrix();
-        glm::mat4 projection = mainCamera.getProjectionMatrix();
+        glm::mat4 newModel4 = glm::mat4(1.0f);
+        newModel4 = glm::translate(newModel4,glm::vec3(20.0f,0.0f,0.0f));
 
-        //triangle1.setModelMatrix(newModel1);
-        //triangle1.Draw(view, projection);
+        glm::mat4 newModel5 = glm::mat4(1.0f);
+        newModel5 = glm::translate(newModel5,glm::vec3(25.0f,0.0f,0.0f));
+        //newModel3 = glm::rotate(newModel3, timeValue, glm::vec3(0.0f, 0.0f, 0.0f));
 
-        //d20.setModelMatrix(newModel3);
-        //d20.Draw(view,projection);
+        triangle.setModelMatrix(newModel);
+        triangle.Draw(view, projection);
 
-        //d4.setModelMatrix(newModel2);
-        //d4.Draw(view,projection);
+        cube.setModelMatrix(newModel1);
+        cube.Draw(view,projection);
 
-        spehere1.setModelMatrix(newModel3);
+        octahedron.setModelMatrix(newModel2);
+        octahedron.Draw(view,projection);
+
+        icosahedron.setModelMatrix(newModel3);
+        icosahedron.Draw(view,projection);
+
+        tetrahedron.setModelMatrix(newModel4);
+        tetrahedron.Draw(view,projection);
+
+        spehere1.setModelMatrix(newModel5);
         spehere1.Draw(view,projection);
-
-        //cube1.setModelMatrix(newModel);
-        //cube1.Draw(view,projection);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

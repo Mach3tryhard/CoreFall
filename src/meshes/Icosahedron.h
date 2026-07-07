@@ -7,9 +7,11 @@ static GLfloat g_vertex_buffer_data_icosahedron[180];
 
 static GLfloat g_color_buffer_data_icosahedron[180];
 
+static GLfloat g_uv_buffer_data_icosahedron[120];
+
 class Icosahedron: public Mesh{
 public:
-    Icosahedron(GLuint shaderProgram);
+    Icosahedron(std::shared_ptr<Material> mat);
 };
 
 #endif //COREFALL_ICOSAHEDRON_H

@@ -6,7 +6,7 @@
 
 class Sphere : public Mesh {
 public:
-    Sphere(GLuint shaderProgram, int sectors = 36, int stacks = 18);
+    Sphere(std::shared_ptr<Material> mat, int sectors = 36, int stacks = 18);
 };
 
 #endif //COREFALL_SPHERE_H

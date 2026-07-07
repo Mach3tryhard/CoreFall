@@ -4,8 +4,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-Icosahedron::Icosahedron(GLuint shaderProgram) {
-    this->programID = shaderProgram;
+Icosahedron::Icosahedron(std::shared_ptr<Material> mat) : Mesh(mat) {
+    this->programID = mat->getProgramID();
 
     float t = (1.0f + std::sqrt(5.0f)) / 2.0f;
 
@@ -43,6 +43,27 @@ Icosahedron::Icosahedron(GLuint shaderProgram) {
     glGenBuffers(1, &vertexbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_icosahedron), g_vertex_buffer_data_icosahedron, GL_STATIC_DRAW);
+
+    const float PI = 3.14159265359f;
+    std::vector<float> finalUVs;
+
+    for (size_t i = 0; i < finalVertices.size(); i += 3) {
+        glm::vec3 n = glm::normalize(glm::vec3(finalVertices[i], finalVertices[i+1], finalVertices[i+2]));
+
+        float u = 0.5f + std::atan2(n.z, n.x) / (2.0f * PI);
+        float v = 0.5f + std::asin(n.y) / PI;
+
+        finalUVs.push_back(u);
+        finalUVs.push_back(v);
+    }
+
+    for (int i = 0; i < finalUVs.size(); i++) {
+        g_uv_buffer_data_icosahedron[i] = finalUVs[i];
+    }
+
+    glGenBuffers(1, &uvbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_uv_buffer_data_icosahedron), g_uv_buffer_data_icosahedron, GL_STATIC_DRAW);
 
     glGenBuffers(1, &colorbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);

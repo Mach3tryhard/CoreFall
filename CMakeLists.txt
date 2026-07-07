@@ -31,8 +31,6 @@ add_executable(${PROJECT_NAME}
         src/LoadShader.h
         src/meshes/Triangle.cpp
         src/meshes/Triangle.h
-        src/Camera.cpp
-        src/Camera.h
         src/meshes/Cube.cpp
         src/meshes/Cube.h
         src/meshes/Tetrahedron.cpp
@@ -45,6 +43,10 @@ add_executable(${PROJECT_NAME}
         src/meshes/Octahedron.h
         src/meshes/Sphere.cpp
         src/meshes/Sphere.h
+        src/Camera.cpp
+        src/Camera.h
+        src/Material.cpp
+        src/Material.h
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE include)
@@ -55,4 +57,9 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/shaders
         $<TARGET_FILE_DIR:${PROJECT_NAME}>/shaders
+)
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/textures
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>/textures
 )

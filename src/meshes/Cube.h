@@ -81,9 +81,18 @@ static const GLfloat g_color_buffer_data_cube[] = {
     0.982f,  0.099f,  0.879f
 };
 
+static const GLfloat g_uv_buffer_data_cube[] = {
+    0.0f,0.0f, 1.0f,0.0f, 1.0f,1.0f,   1.0f,1.0f, 0.0f,1.0f, 0.0f,0.0f,
+    1.0f,0.0f, 0.0f,0.0f, 0.0f,1.0f,   0.0f,1.0f, 1.0f,1.0f, 1.0f,0.0f,
+    0.0f,0.0f, 1.0f,0.0f, 1.0f,1.0f,   1.0f,1.0f, 0.0f,1.0f, 0.0f,0.0f,
+    0.0f,0.0f, 1.0f,0.0f, 1.0f,1.0f,   1.0f,1.0f, 0.0f,1.0f, 0.0f,0.0f,
+    0.0f,0.0f, 1.0f,0.0f, 1.0f,1.0f,   1.0f,1.0f, 0.0f,1.0f, 0.0f,0.0f,
+    1.0f,0.0f, 0.0f,0.0f, 0.0f,1.0f,   0.0f,1.0f, 1.0f,1.0f, 1.0f,0.0f
+};
+
 class Cube: public Mesh {
 public:
-    Cube(GLuint shaderProgram);
+    Cube(std::shared_ptr<Material> mat);
 };
 
 #endif //COREFALL_CUBE_H
