@@ -47,6 +47,10 @@ add_executable(${PROJECT_NAME}
         src/Camera.h
         src/Material.cpp
         src/Material.h
+        src/meshes/Torus.cpp
+        src/meshes/Torus.h
+        src/meshes/Loaded.cpp
+        src/meshes/Loaded.h
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE include)
@@ -62,4 +66,9 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/textures
         $<TARGET_FILE_DIR:${PROJECT_NAME}>/textures
+)
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/models
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>/models
 )

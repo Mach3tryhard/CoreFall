@@ -9,8 +9,10 @@
 #include "meshes/Triangle.h"
 #include "meshes/Tetrahedron.h"
 #include "meshes/Icosahedron.h"
+#include "meshes/Loaded.h"
 #include "meshes/Octahedron.h"
 #include "meshes/Sphere.h"
+#include "meshes/Torus.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -50,12 +52,16 @@ int main() {
     auto defaultMaterial = std::make_shared<Material>(programID, "textures/uv_texture.dds");
 
     Triangle triangle(defaultMaterial);
+    Sphere spehere(defaultMaterial);
+    Torus torus(defaultMaterial);
+
     Cube cube(defaultMaterial);
     Octahedron octahedron(defaultMaterial);
     Icosahedron icosahedron(defaultMaterial);
     Tetrahedron tetrahedron(defaultMaterial);
-    Sphere spehere1(defaultMaterial);
     Camera camera(glm::vec3(10.0f, 0.0f, 10.0f));
+    Loaded meatball(defaultMaterial);
+    meatball.loadOBJ("models/monkey.obj");
 
     // Main Engine Loop
     while (!glfwWindowShouldClose(window)) {
@@ -89,6 +95,12 @@ int main() {
         newModel5 = glm::translate(newModel5,glm::vec3(25.0f,0.0f,0.0f));
         //newModel3 = glm::rotate(newModel3, timeValue, glm::vec3(0.0f, 0.0f, 0.0f));
 
+        glm::mat4 newModel6 = glm::mat4(1.0f);
+        newModel6 = glm::translate(newModel6,glm::vec3(0.0f,-5.0f,0.0f));
+
+        glm::mat4 newModel7 = glm::mat4(1.0f);
+        newModel7 = glm::translate(newModel7,glm::vec3(5.0f,-5.0f,0.0f));
+
         triangle.setModelMatrix(newModel);
         triangle.Draw(view, projection);
 
@@ -104,8 +116,14 @@ int main() {
         tetrahedron.setModelMatrix(newModel4);
         tetrahedron.Draw(view,projection);
 
-        spehere1.setModelMatrix(newModel5);
-        spehere1.Draw(view,projection);
+        spehere.setModelMatrix(newModel5);
+        spehere.Draw(view,projection);
+
+        torus.setModelMatrix(newModel6);
+        torus.Draw(view,projection);
+
+        meatball.setModelMatrix(newModel7);
+        meatball.Draw(view,projection);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

@@ -9,6 +9,7 @@ class Mesh {
 protected:
     GLuint vertexbuffer;
     GLuint uvbuffer;
+    GLuint normalbuffer;
     GLuint colorbuffer;
     GLuint programID;
     std::shared_ptr<Material> material;
