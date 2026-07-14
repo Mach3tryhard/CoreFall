@@ -4,6 +4,8 @@ project(CoreFall)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(OpenGL REQUIRED)
+
 include(FetchContent)
 FetchContent_Declare(
         glfw
@@ -55,7 +57,15 @@ add_executable(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw opengl32 glm::glm)
+target_link_libraries(${PROJECT_NAME} PRIVATE glm::glm)
+
+if (WIN32)
+    target_link_libraries(${PROJECT_NAME} PRIVATE glfw opengl32)
+elseif (UNIX AND NOT APPLE)
+    target_link_libraries(${PROJECT_NAME} PRIVATE glfw OpenGL::GL)
+endif()
+
+#target_link_libraries(${PROJECT_NAME} PRIVATE glfw opengl32 glm::glm)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
