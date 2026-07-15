@@ -24,7 +24,7 @@ private:
     glm::mat4 ProjectionMatrix;
 
 public:
-    Camera(glm::vec3 startPosition = glm::vec3(0.0f, 0.0f, 5.0f));
+    Camera(glm::vec3 startPosition = glm::vec3(0.0f, 0.0f, 0.0f));
 
     void computeMatricesFromInputs(GLFWwindow* window);
 

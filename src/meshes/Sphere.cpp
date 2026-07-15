@@ -7,6 +7,7 @@ Sphere::Sphere(std::shared_ptr<Material> mat, int sectors, int stacks) : Mesh(ma
     this->programID = mat->getProgramID();
 
     std::vector<float> finalVertices;
+    std::vector<float> finalNormals;
     float radius = 1.0f;
     const float PI = 3.14159265359f;
 
@@ -23,6 +24,11 @@ Sphere::Sphere(std::shared_ptr<Material> mat, int sectors, int stacks) : Mesh(ma
             glm::vec3 p3(radius * std::sin(phi1) * std::cos(theta2), radius * std::cos(phi1), radius * std::sin(phi1) * std::sin(theta2));
             glm::vec3 p4(radius * std::sin(phi2) * std::cos(theta2), radius * std::cos(phi2), radius * std::sin(phi2) * std::sin(theta2));
 
+            glm::vec3 n1 = glm::normalize(p1);
+            glm::vec3 n2 = glm::normalize(p2);
+            glm::vec3 n3 = glm::normalize(p3);
+            glm::vec3 n4 = glm::normalize(p4);
+
             finalVertices.push_back(p1.x); finalVertices.push_back(p1.y); finalVertices.push_back(p1.z);
             finalVertices.push_back(p2.x); finalVertices.push_back(p2.y); finalVertices.push_back(p2.z);
             finalVertices.push_back(p3.x); finalVertices.push_back(p3.y); finalVertices.push_back(p3.z);
@@ -30,14 +36,18 @@ Sphere::Sphere(std::shared_ptr<Material> mat, int sectors, int stacks) : Mesh(ma
             finalVertices.push_back(p3.x); finalVertices.push_back(p3.y); finalVertices.push_back(p3.z);
             finalVertices.push_back(p2.x); finalVertices.push_back(p2.y); finalVertices.push_back(p2.z);
             finalVertices.push_back(p4.x); finalVertices.push_back(p4.y); finalVertices.push_back(p4.z);
+
+            finalNormals.push_back(n1.x); finalNormals.push_back(n1.y); finalNormals.push_back(n1.z);
+            finalNormals.push_back(n2.x); finalNormals.push_back(n2.y); finalNormals.push_back(n2.z);
+            finalNormals.push_back(n3.x); finalNormals.push_back(n3.y); finalNormals.push_back(n3.z);
+
+            finalNormals.push_back(n3.x); finalNormals.push_back(n3.y); finalNormals.push_back(n3.z);
+            finalNormals.push_back(n2.x); finalNormals.push_back(n2.y); finalNormals.push_back(n2.z);
+            finalNormals.push_back(n4.x); finalNormals.push_back(n4.y); finalNormals.push_back(n4.z);
         }
     }
 
     this->vertexCount = finalVertices.size() / 3;
-
-    glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glBufferData(GL_ARRAY_BUFFER, finalVertices.size() * sizeof(finalVertices[0]), finalVertices.data(), GL_STATIC_DRAW);
 
     std::vector<float> finalUVs;
 
@@ -59,11 +69,10 @@ Sphere::Sphere(std::shared_ptr<Material> mat, int sectors, int stacks) : Mesh(ma
         }
     }
 
-    glGenBuffers(1, &uvbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-    glBufferData(GL_ARRAY_BUFFER, finalUVs.size() * sizeof(float), finalUVs.data(), GL_STATIC_DRAW);
-
-    glGenBuffers(1, &colorbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-    glBufferData(GL_ARRAY_BUFFER, finalVertices.size() * sizeof(finalVertices[0]), finalVertices.data(), GL_STATIC_DRAW);
+    LoadBuffers(
+        finalVertices.data(), finalVertices.size() * sizeof(float),
+        finalVertices.data(), finalVertices.size() * sizeof(float),
+        finalUVs.data(),      finalUVs.size()      * sizeof(float),
+        finalNormals.data(),  finalNormals.size()  * sizeof(float)
+    );
 }

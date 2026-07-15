@@ -2,6 +2,7 @@
 #define COREFALL_TORUS_H
 #include <glad/glad.h>
 #include "Mesh.h"
+#include <glm/glm.hpp>
 
 class Torus : public Mesh {
 public:

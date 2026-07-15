@@ -3,7 +3,7 @@
 #include "glad/glad.h"
 #include "Mesh.h"
 
-static const GLfloat g_vertex_buffer_data_tetrahedron[] = {
+static GLfloat g_vertex_buffer_data_tetrahedron[] = {
     1.0f,  1.0f,  1.0f,
     1.0f, -1.0f, -1.0f,
    -1.0f,  1.0f, -1.0f,
@@ -18,8 +18,22 @@ static const GLfloat g_vertex_buffer_data_tetrahedron[] = {
     1.0f, -1.0f, -1.0f
 };
 
+static GLfloat g_normal_buffer_data_tetrahedron[] = {
+    0.57735f,  0.57735f, -0.57735f,
+    0.57735f,  0.57735f, -0.57735f,
+    0.57735f,  0.57735f, -0.57735f,
+    0.57735f, -0.57735f,  0.57735f,
+    0.57735f, -0.57735f,  0.57735f,
+    0.57735f, -0.57735f,  0.57735f,
+    -0.57735f,  0.57735f,  0.57735f,
+    -0.57735f,  0.57735f,  0.57735f,
+    -0.57735f,  0.57735f,  0.57735f,
+    -0.57735f, -0.57735f, -0.57735f,
+    -0.57735f, -0.57735f, -0.57735f,
+    -0.57735f, -0.57735f, -0.57735f
+};
 
-static const GLfloat g_color_buffer_data_tetrahedron[] = {
+static GLfloat g_color_buffer_data_tetrahedron[] = {
     1.0f,  1.0f,  1.0f,
     1.0f, -1.0f, -1.0f,
    -1.0f,  1.0f, -1.0f,
@@ -34,11 +48,11 @@ static const GLfloat g_color_buffer_data_tetrahedron[] = {
     1.0f, -1.0f, -1.0f
 };
 
-static const GLfloat g_uv_buffer_data_tetrahedron[] = {
- 0.0f, 0.0f,  1.0f, 0.0f,  0.5f, 1.0f,
- 0.0f, 0.0f,  1.0f, 0.0f,  0.5f, 1.0f,
- 0.0f, 0.0f,  1.0f, 0.0f,  0.5f, 1.0f,
- 0.0f, 0.0f,  1.0f, 0.0f,  0.5f, 1.0f
+static GLfloat g_uv_buffer_data_tetrahedron[] = {
+    0.0f, 0.0f,  1.0f, 0.0f,  0.5f, 1.0f,
+    0.0f, 0.0f,  1.0f, 0.0f,  0.5f, 1.0f,
+    0.0f, 0.0f,  1.0f, 0.0f,  0.5f, 1.0f,
+    0.0f, 0.0f,  1.0f, 0.0f,  0.5f, 1.0f
 };
 
 class Tetrahedron: public Mesh {

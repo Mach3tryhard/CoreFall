@@ -3,12 +3,6 @@
 #include <glad/glad.h>
 #include "Mesh.h"
 
-static GLfloat g_vertex_buffer_data_icosahedron[180];
-
-static GLfloat g_color_buffer_data_icosahedron[180];
-
-static GLfloat g_uv_buffer_data_icosahedron[120];
-
 class Icosahedron: public Mesh{
 public:
     Icosahedron(std::shared_ptr<Material> mat);

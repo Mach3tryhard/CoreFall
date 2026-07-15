@@ -53,6 +53,8 @@ add_executable(${PROJECT_NAME}
         src/meshes/Torus.h
         src/meshes/Loaded.cpp
         src/meshes/Loaded.h
+        src/object/Object.cpp
+        src/object/Object.h
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE include)

@@ -7,6 +7,7 @@ Torus::Torus(std::shared_ptr<Material> mat, float mainRadius, float tubeRadius, 
     this->programID = mat->getProgramID();
 
     std::vector<float> finalVertices;
+    std::vector<float> finalNormals;
     std::vector<float> finalUVs;
     std::vector<float> finalColors;
     
@@ -26,6 +27,9 @@ Torus::Torus(std::shared_ptr<Material> mat, float mainRadius, float tubeRadius, 
         float theta1 = u1 * 2.0f * PI;
         float theta2 = u2 * 2.0f * PI;
 
+        glm::vec3 c1(mainRadius * std::cos(theta1), 0.0f, mainRadius * std::sin(theta1));
+        glm::vec3 c2(mainRadius * std::cos(theta2), 0.0f, mainRadius * std::sin(theta2));
+
         for (int j = 0; j < tubeSectors; ++j) {
             float v1 = float(j) / tubeSectors;
             float v2 = float(j + 1) / tubeSectors;
@@ -37,8 +41,21 @@ Torus::Torus(std::shared_ptr<Material> mat, float mainRadius, float tubeRadius, 
             glm::vec3 p3 = getPosition(theta1, phi2);
             glm::vec3 p4 = getPosition(theta2, phi2);
 
+            glm::vec3 n1 = glm::normalize(p1 - c1);
+            glm::vec3 n2 = glm::normalize(p2 - c1);
+            glm::vec3 n3 = glm::normalize(p3 - c2);
+            glm::vec3 n4 = glm::normalize(p4 - c2);
+
             finalVertices.insert(finalVertices.end(), {p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, p3.x, p3.y, p3.z});
             finalUVs.insert(finalUVs.end(), {u1, v1, u2, v1, u1, v2});
+
+            finalNormals.push_back(n1.x); finalNormals.push_back(n1.y); finalNormals.push_back(n1.z);
+            finalNormals.push_back(n2.x); finalNormals.push_back(n2.y); finalNormals.push_back(n2.z);
+            finalNormals.push_back(n3.x); finalNormals.push_back(n3.y); finalNormals.push_back(n3.z);
+
+            finalNormals.push_back(n3.x); finalNormals.push_back(n3.y); finalNormals.push_back(n3.z);
+            finalNormals.push_back(n2.x); finalNormals.push_back(n2.y); finalNormals.push_back(n2.z);
+            finalNormals.push_back(n4.x); finalNormals.push_back(n4.y); finalNormals.push_back(n4.z);
 
             finalVertices.insert(finalVertices.end(), {p3.x, p3.y, p3.z, p2.x, p2.y, p2.z, p4.x, p4.y, p4.z});
             finalUVs.insert(finalUVs.end(), {u1, v2, u2, v1, u2, v2});
@@ -51,15 +68,10 @@ Torus::Torus(std::shared_ptr<Material> mat, float mainRadius, float tubeRadius, 
         finalColors.push_back(1.0f);
     }
 
-    glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glBufferData(GL_ARRAY_BUFFER, finalVertices.size() * sizeof(float), finalVertices.data(), GL_STATIC_DRAW);
-
-    glGenBuffers(1, &uvbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-    glBufferData(GL_ARRAY_BUFFER, finalUVs.size() * sizeof(float), finalUVs.data(), GL_STATIC_DRAW);
-
-    glGenBuffers(1, &colorbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-    glBufferData(GL_ARRAY_BUFFER, finalColors.size() * sizeof(float), finalColors.data(), GL_STATIC_DRAW);
+    LoadBuffers(
+        finalVertices.data(), finalVertices.size() * sizeof(float),
+        finalColors.data(), finalColors.size() * sizeof(float),
+        finalUVs.data(),      finalUVs.size()      * sizeof(float),
+        finalNormals.data(),  finalNormals.size()  * sizeof(float)
+    );
 }

@@ -7,9 +7,12 @@
 Icosahedron::Icosahedron(std::shared_ptr<Material> mat) : Mesh(mat) {
     this->programID = mat->getProgramID();
 
+    std::vector<float> finalVertices;
+    std::vector<float> finalNormals;
+
     float t = (1.0f + std::sqrt(5.0f)) / 2.0f;
 
-    std::vector<glm::vec3> baseVertices = {
+    std::vector baseVertices = {
         glm::vec3(-1,  t,  0), glm::vec3( 1,  t,  0), glm::vec3(-1, -t,  0), glm::vec3( 1, -t,  0),
         glm::vec3( 0, -1,  t), glm::vec3( 0,  1,  t), glm::vec3( 0, -1, -t), glm::vec3( 0,  1, -t),
         glm::vec3( t,  0, -1), glm::vec3( t,  0,  1), glm::vec3(-t,  0, -1), glm::vec3(-t,  0,  1)
@@ -26,23 +29,27 @@ Icosahedron::Icosahedron(std::shared_ptr<Material> mat) : Mesh(mat) {
         4, 9, 5,    2, 4, 11,   6, 2, 10,   8, 6, 7,    9, 8, 1
     };
 
-    std::vector<float> finalVertices;
-    for(int i = 0; i < 60; ++i) {
-        glm::vec3 v = baseVertices[indices[i]];
-        finalVertices.push_back(v.x);
-        finalVertices.push_back(v.y);
-        finalVertices.push_back(v.z);
+    for(int i = 0; i < 60; i += 3) {
+        glm::vec3 v1 = baseVertices[indices[i]];
+        glm::vec3 v2 = baseVertices[indices[i+1]];
+        glm::vec3 v3 = baseVertices[indices[i+2]];
+
+        glm::vec3 edge1 = v2 - v1;
+        glm::vec3 edge2 = v3 - v1;
+        glm::vec3 normal = glm::normalize(glm::cross(edge1, edge2));
+
+        finalVertices.push_back(v1.x); finalVertices.push_back(v1.y); finalVertices.push_back(v1.z);
+        finalVertices.push_back(v2.x); finalVertices.push_back(v2.y); finalVertices.push_back(v2.z);
+        finalVertices.push_back(v3.x); finalVertices.push_back(v3.y); finalVertices.push_back(v3.z);
+
+        for(int j = 0; j < 3; j++) {
+            finalNormals.push_back(normal.x);
+            finalNormals.push_back(normal.y);
+            finalNormals.push_back(normal.z);
+        }
     }
 
-    for (int i=0;i<finalVertices.size();i++) {
-        g_vertex_buffer_data_icosahedron[i] = finalVertices.data()[i];
-        g_color_buffer_data_icosahedron[i] = finalVertices.data()[i];
-    }
     this->vertexCount = 60;
-
-    glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_icosahedron), g_vertex_buffer_data_icosahedron, GL_STATIC_DRAW);
 
     const float PI = 3.14159265359f;
     std::vector<float> finalUVs;
@@ -57,15 +64,10 @@ Icosahedron::Icosahedron(std::shared_ptr<Material> mat) : Mesh(mat) {
         finalUVs.push_back(v);
     }
 
-    for (int i = 0; i < finalUVs.size(); i++) {
-        g_uv_buffer_data_icosahedron[i] = finalUVs[i];
-    }
-
-    glGenBuffers(1, &uvbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_uv_buffer_data_icosahedron), g_uv_buffer_data_icosahedron, GL_STATIC_DRAW);
-
-    glGenBuffers(1, &colorbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data_icosahedron), g_color_buffer_data_icosahedron, GL_STATIC_DRAW);
+    LoadBuffers(
+        finalVertices.data(), finalVertices.size() * sizeof(float),
+        finalVertices.data(), finalVertices.size() * sizeof(float),
+        finalUVs.data(),      finalUVs.size()      * sizeof(float),
+        finalNormals.data(),  finalNormals.size()  * sizeof(float)
+    );
 }

@@ -97,22 +97,42 @@ bool Loaded::loadOBJ(const char *path) {
 
     this->vertexCount = vertices.size();
 
-    glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
+    std::vector<float> pureWhiteColors(vertices.size() * 3, 1.0f);
 
-    glGenBuffers(1, &uvbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-    glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), uvs.data(), GL_STATIC_DRAW);
+    GLfloat* normalDataPtr = (GLfloat*)normals.data();
+    size_t normalSize = normals.size() * sizeof(glm::vec3);
+    std::vector<GLfloat> autoNormals;
 
-    std::vector<float> pureWhiteColors;
-    for(size_t i = 0; i < vertices.size() * 3; i++) {
-        pureWhiteColors.push_back(1.0f);
+    if (pureNormals.empty()) {
+        autoNormals = generateFlatNormals((GLfloat*)vertices.data(), vertices.size() * sizeof(glm::vec3));
+        normalDataPtr = autoNormals.data();
+        normalSize = autoNormals.size() * sizeof(GLfloat);
     }
 
-    glGenBuffers(1, &colorbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-    glBufferData(GL_ARRAY_BUFFER, pureWhiteColors.size() * sizeof(float), pureWhiteColors.data(), GL_STATIC_DRAW);
+    GLfloat* uvDataPtr = (GLfloat*)uvs.data();
+    size_t uvSize = uvs.size() * sizeof(glm::vec2);
+    std::vector<glm::vec2> autoUVs;
+
+    if (pureUVs.empty()) {
+        const float PI = 3.14159265359f;
+        for (const auto& v : vertices) {
+            glm::vec3 n = glm::normalize(v);
+
+            float u = 0.5f + std::atan2(n.z, n.x) / (2.0f * PI);
+            float v_coord = 0.5f + std::asin(n.y) / PI;
+
+            autoUVs.push_back(glm::vec2(u, v_coord));
+        }
+        uvDataPtr = (GLfloat*)autoUVs.data();
+        uvSize = autoUVs.size() * sizeof(glm::vec2);
+    }
+
+    LoadBuffers(
+        (GLfloat*)vertices.data(), vertices.size() * sizeof(glm::vec3),
+        pureWhiteColors.data(),    pureWhiteColors.size() * sizeof(float),
+        uvDataPtr,                 uvSize,
+        normalDataPtr,             normalSize
+    );
 
     return true;
 }

@@ -1,6 +1,6 @@
 #ifndef COREFALL_SPHERE_H
 #define COREFALL_SPHERE_H
-
+#include <glm/glm.hpp>
 #include <glad/glad.h>
 #include "Mesh.h"
 

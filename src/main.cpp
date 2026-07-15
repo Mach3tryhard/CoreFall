@@ -3,7 +3,6 @@
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Camera.h"
-#include "Camera.h"
 #include "LoadShader.h"
 #include "meshes/Cube.h"
 #include "meshes/Triangle.h"
@@ -13,6 +12,7 @@
 #include "meshes/Octahedron.h"
 #include "meshes/Sphere.h"
 #include "meshes/Torus.h"
+#include "object/Object.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -49,19 +49,44 @@ int main() {
     glBindVertexArray(VertexArrayID);
 
     GLuint programID = LoadShaders( "shaders/VertexShader.glsl", "shaders/FragmentShader.glsl" );
-    auto defaultMaterial = std::make_shared<Material>(programID, "textures/uv_texture.dds");
 
-    Triangle triangle(defaultMaterial);
-    Sphere spehere(defaultMaterial);
-    Torus torus(defaultMaterial);
+    auto uvMaterial = std::make_shared<Material>(programID, "textures/uv_texture.dds");
+    auto defaultMaterial = std::make_shared<Material>(programID, "textures/default.dds");
 
-    Cube cube(defaultMaterial);
-    Octahedron octahedron(defaultMaterial);
-    Icosahedron icosahedron(defaultMaterial);
-    Tetrahedron tetrahedron(defaultMaterial);
-    Camera camera(glm::vec3(10.0f, 0.0f, 10.0f));
-    Loaded meatball(defaultMaterial);
-    meatball.loadOBJ("models/monkey.obj");
+    auto trianglemesh = std::make_shared<Triangle>(uvMaterial);
+
+    auto sphereMesh = std::make_shared<Sphere>(uvMaterial);
+    auto torusMesh = std::make_shared<Torus>(uvMaterial);
+
+    auto cubeMesh = std::make_shared<Cube>(uvMaterial);
+    auto tetrahedronMesh = std::make_shared<Tetrahedron>(uvMaterial);
+    auto octahedronMesh = std::make_shared<Octahedron>(uvMaterial);
+    auto icosahedronMesh = std::make_shared<Icosahedron>(uvMaterial);
+
+    auto loadedMesh = std::make_shared<Loaded>(uvMaterial);
+    loadedMesh->loadOBJ("models/monkey.obj");
+
+    Object TRIANGLE(glm::vec3(2.5f,0.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    TRIANGLE.addMesh(trianglemesh);
+
+    Object SPHERE(glm::vec3(5.0f,0.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    SPHERE.addMesh(sphereMesh);
+    Object TORUS(glm::vec3(7.5f,0.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    TORUS.addMesh(torusMesh);
+
+    Object CUBE(glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    CUBE.addMesh(cubeMesh);
+    Object TETRAHEDRON(glm::vec3(10.0f,0.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    TETRAHEDRON.addMesh(tetrahedronMesh);
+    Object OCTAHEDRON(glm::vec3(0.0f,5.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    OCTAHEDRON.addMesh(octahedronMesh);
+    Object ICOSAHEDRON(glm::vec3(2.5f,5.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    ICOSAHEDRON.addMesh(icosahedronMesh);
+
+    Object MONKEY(glm::vec3(5.0f,5.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    MONKEY.addMesh(loadedMesh);
+
+    Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
 
     // Main Engine Loop
     while (!glfwWindowShouldClose(window)) {
@@ -70,60 +95,18 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(programID);
 
-        float timeValue = glfwGetTime();
-
         camera.computeMatricesFromInputs(window);
         glm::mat4 view = camera.getViewMatrix();
         glm::mat4 projection = camera.getProjectionMatrix();
 
-        glm::mat4 newModel = glm::mat4(1.0f);
-        newModel = glm::translate(newModel, glm::vec3(0.0f, 0.0f, 1.0f));
-
-        glm::mat4 newModel1 = glm::mat4(1.0f);
-        newModel1 = glm::translate(newModel1, glm::vec3(5.0f, 0.0f, 0.0f));
-
-        glm::mat4 newModel2 = glm::mat4(1.0f);
-        newModel2 = glm::translate(newModel2,  glm::vec3(10.0f, 0.0f, 1.0f));
-
-        glm::mat4 newModel3 = glm::mat4(1.0f);
-        newModel3 = glm::translate(newModel3,glm::vec3(15.0f,0.0f,0.0f));
-
-        glm::mat4 newModel4 = glm::mat4(1.0f);
-        newModel4 = glm::translate(newModel4,glm::vec3(20.0f,0.0f,0.0f));
-
-        glm::mat4 newModel5 = glm::mat4(1.0f);
-        newModel5 = glm::translate(newModel5,glm::vec3(25.0f,0.0f,0.0f));
-        //newModel3 = glm::rotate(newModel3, timeValue, glm::vec3(0.0f, 0.0f, 0.0f));
-
-        glm::mat4 newModel6 = glm::mat4(1.0f);
-        newModel6 = glm::translate(newModel6,glm::vec3(0.0f,-5.0f,0.0f));
-
-        glm::mat4 newModel7 = glm::mat4(1.0f);
-        newModel7 = glm::translate(newModel7,glm::vec3(5.0f,-5.0f,0.0f));
-
-        triangle.setModelMatrix(newModel);
-        triangle.Draw(view, projection);
-
-        cube.setModelMatrix(newModel1);
-        cube.Draw(view,projection);
-
-        octahedron.setModelMatrix(newModel2);
-        octahedron.Draw(view,projection);
-
-        icosahedron.setModelMatrix(newModel3);
-        icosahedron.Draw(view,projection);
-
-        tetrahedron.setModelMatrix(newModel4);
-        tetrahedron.Draw(view,projection);
-
-        spehere.setModelMatrix(newModel5);
-        spehere.Draw(view,projection);
-
-        torus.setModelMatrix(newModel6);
-        torus.Draw(view,projection);
-
-        meatball.setModelMatrix(newModel7);
-        meatball.Draw(view,projection);
+        CUBE.Draw(view,projection);
+        TRIANGLE.Draw(view,projection);
+        SPHERE.Draw(view,projection);
+        TORUS.Draw(view,projection);
+        TETRAHEDRON.Draw(view,projection);
+        OCTAHEDRON.Draw(view,projection);
+        ICOSAHEDRON.Draw(view,projection);
+        MONKEY.Draw(view,projection);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

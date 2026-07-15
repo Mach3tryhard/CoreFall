@@ -28,8 +28,11 @@ public:
 
     Mesh(std::shared_ptr<Material> material);
 
+    void LoadBuffers(GLfloat* vertexBuffer, size_t vSize,GLfloat* colorBuffer, size_t cSize,GLfloat* uvBuffer, size_t uSize,GLfloat* normalBuffer, size_t nSize);
+
     void Draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
     void setModelMatrix(const glm::mat4& newModel);
+    std::vector<GLfloat> generateFlatNormals(const GLfloat* vertices, size_t numBytes);
 };
 
 
