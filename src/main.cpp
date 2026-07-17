@@ -53,18 +53,20 @@ int main() {
     auto uvMaterial = std::make_shared<Material>(programID, "textures/uv_texture.dds");
     auto defaultMaterial = std::make_shared<Material>(programID, "textures/default.dds");
 
-    auto trianglemesh = std::make_shared<Triangle>(uvMaterial);
+    auto trianglemesh = std::make_shared<Triangle>(defaultMaterial);
 
-    auto sphereMesh = std::make_shared<Sphere>(uvMaterial);
-    auto torusMesh = std::make_shared<Torus>(uvMaterial);
+    auto sphereMesh = std::make_shared<Sphere>(defaultMaterial);
+    auto torusMesh = std::make_shared<Torus>(defaultMaterial);
 
-    auto cubeMesh = std::make_shared<Cube>(uvMaterial);
-    auto tetrahedronMesh = std::make_shared<Tetrahedron>(uvMaterial);
-    auto octahedronMesh = std::make_shared<Octahedron>(uvMaterial);
-    auto icosahedronMesh = std::make_shared<Icosahedron>(uvMaterial);
+    auto cubeMesh = std::make_shared<Cube>(defaultMaterial);
+    auto tetrahedronMesh = std::make_shared<Tetrahedron>(defaultMaterial);
+    auto octahedronMesh = std::make_shared<Octahedron>(defaultMaterial);
+    auto icosahedronMesh = std::make_shared<Icosahedron>(defaultMaterial);
 
-    auto loadedMesh = std::make_shared<Loaded>(uvMaterial);
+    auto loadedMesh = std::make_shared<Loaded>(defaultMaterial);
     loadedMesh->loadOBJ("models/monkey.obj");
+
+    auto elementLight = std::make_shared<Light>(glm::vec3(1.0f,1.0f,1.0f),80);
 
     Object TRIANGLE(glm::vec3(2.5f,0.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
     TRIANGLE.addMesh(trianglemesh);
@@ -86,6 +88,9 @@ int main() {
     Object MONKEY(glm::vec3(5.0f,5.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
     MONKEY.addMesh(loadedMesh);
 
+    Object LIGHT(glm::vec3(5.0f,2.5f,10.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    LIGHT.addLight(elementLight);
+
     Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
 
     // Main Engine Loop
@@ -94,6 +99,10 @@ int main() {
         glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(programID);
+
+        if (LIGHT.getLight() != nullptr) {
+            LIGHT.getLight()->sendToShader(programID, LIGHT.getPosition());
+        }
 
         camera.computeMatricesFromInputs(window);
         glm::mat4 view = camera.getViewMatrix();

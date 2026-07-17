@@ -38,6 +38,12 @@ void Mesh::Draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) 
     GLuint MatrixID = glGetUniformLocation(material->getProgramID(), "MVP");
     glUniformMatrix4fv(MatrixID, 1, GL_FALSE, glm::value_ptr(MVP));
 
+    GLuint modelMatrixID = glGetUniformLocation(material->getProgramID(), "M");
+    glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
+
+    GLuint viewMatrixID = glGetUniformLocation(material->getProgramID(), "V");
+    glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, &viewMatrix[0][0]);
+
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);

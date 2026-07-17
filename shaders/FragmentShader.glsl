@@ -1,19 +1,28 @@
 #version 330 core
 
-in vec3 fragmentColor;
 in vec2 UV;
+in vec3 Position_worldspace;
+in vec3 Normal_cameraspace;
+in vec3 EyeDirection_cameraspace;
+in vec3 LightDirection_cameraspace;
 
 out vec3 color;
 
 uniform sampler2D myTextureSampler;
-uniform bool useVertexColor;
+uniform vec3 LightColor;
+uniform float LightPower;
+uniform vec3 LightPosition_worldspace;
 
 void main(){
-    vec3 textureColor = texture(myTextureSampler, UV).rgb;
+    vec3 MaterialDiffuseColor = texture(myTextureSampler, UV).rgb;
 
-    if (useVertexColor) {
-        color = textureColor * fragmentColor;
-    } else {
-        color = textureColor;
-    }
+    float distance = length(LightPosition_worldspace - Position_worldspace);
+
+    vec3 n = normalize(Normal_cameraspace);
+
+    vec3 l = normalize(LightDirection_cameraspace);
+
+    float cosTheta = clamp(dot(n, l), 0.0, 1.0);
+
+    color = MaterialDiffuseColor * LightColor * LightPower * cosTheta / (distance * distance);
 }

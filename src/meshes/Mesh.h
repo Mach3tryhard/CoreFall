@@ -20,6 +20,7 @@ public:
         if (vertexbuffer != 0) glDeleteBuffers(1, &vertexbuffer);
         if (colorbuffer != 0) glDeleteBuffers(1, &colorbuffer);
         if (uvbuffer != 0) glDeleteBuffers(1, &uvbuffer);
+        if (normalbuffer != 0) glDeleteBuffers(1, &normalbuffer);
     }
 
     Mesh() = default;

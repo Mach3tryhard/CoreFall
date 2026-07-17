@@ -55,6 +55,8 @@ add_executable(${PROJECT_NAME}
         src/meshes/Loaded.h
         src/object/Object.cpp
         src/object/Object.h
+        src/lights/Light.cpp
+        src/lights/Light.h
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE include)

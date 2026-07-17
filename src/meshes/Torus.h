@@ -6,7 +6,7 @@
 
 class Torus : public Mesh {
 public:
-    Torus(std::shared_ptr<Material> mat, float mainRadius = 1.0f, float tubeRadius = 0.3f, int mainSectors = 36, int tubeSectors = 18);
+    Torus(std::shared_ptr<Material> mat, float mainRadius = 1.0f, float tubeRadius = 0.3f, int mainSectors = 128, int tubeSectors = 64);
 };
 
 #endif //COREFALL_TORUS_H

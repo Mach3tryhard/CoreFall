@@ -35,3 +35,11 @@ void Object::Draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix
 void Object::addMesh(std::shared_ptr<Mesh> addedMesh) {
     this->mesh = addedMesh;
 }
+
+void Object::addLight(std::shared_ptr<Light> addedLight) {
+    this->light=addedLight;
+}
+
+std::shared_ptr<Light> Object::getLight() {
+    return light;
+}
