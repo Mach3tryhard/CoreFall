@@ -30,7 +30,9 @@ public:
     void setPosition(const glm::vec3& pos);
     void setRotation(const glm::vec3& rot);
     void setScale(const glm::vec3& scl);
+    void setDirection(const glm::vec3& dir);
 
+    glm::vec3 getDirection() const;
     glm::vec3 getPosition() const;
     glm::vec3 getRotation() const;
     glm::vec3 getScale() const;

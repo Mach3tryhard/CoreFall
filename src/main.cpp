@@ -66,7 +66,10 @@ int main() {
     auto loadedMesh = std::make_shared<Loaded>(defaultMaterial);
     loadedMesh->loadOBJ("models/monkey.obj");
 
-    auto elementLight = std::make_shared<Light>(glm::vec3(1.0f,1.0f,1.0f),80);
+    auto pointLight = std::make_shared<Light>(LightType::POINT,glm::vec3(1.0f,1.0f,1.0f),80);
+    auto ambientalLight = std::make_shared<Light>(LightType::AMBIENT,glm::vec3(1.0f,1.0f,1.0f),0.2);
+    auto spotLight = std::make_shared<Light>(LightType::SPOT,glm::vec3(1.0f,1.0f,1.0f),200);
+    auto directionalLight = std::make_shared<Light>(LightType::DIRECTIONAL,glm::vec3(1.0f,1.0f,1.0f),1);
 
     Object TRIANGLE(glm::vec3(2.5f,0.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
     TRIANGLE.addMesh(trianglemesh);
@@ -88,8 +91,18 @@ int main() {
     Object MONKEY(glm::vec3(5.0f,5.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
     MONKEY.addMesh(loadedMesh);
 
-    Object LIGHT(glm::vec3(5.0f,2.5f,10.0f),glm::vec3(0.0f),glm::vec3(1.0f));
-    LIGHT.addLight(elementLight);
+    Object POINT_LIGHT(glm::vec3(5.0f,2.5f,10.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    POINT_LIGHT.addLight(pointLight);
+
+    Object AMBIENT_LIGHT(glm::vec3(5.0f,5.0f,5.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    AMBIENT_LIGHT.addLight(ambientalLight);
+
+    Object DIRECTIONAL_LIGHT(glm::vec3(5.0f,2.5f,10.0f),glm::vec3(1.0f),glm::vec3(1.0f));
+    DIRECTIONAL_LIGHT.addLight(directionalLight);
+
+    Object SPOT_LIGHT(glm::vec3(5.0f,2.5f,30.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    SPOT_LIGHT.addMesh(sphereMesh);
+    SPOT_LIGHT.addLight(spotLight);
 
     Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
 
@@ -100,13 +113,19 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(programID);
 
-        if (LIGHT.getLight() != nullptr) {
-            LIGHT.getLight()->sendToShader(programID, LIGHT.getPosition());
-        }
-
         camera.computeMatricesFromInputs(window);
         glm::mat4 view = camera.getViewMatrix();
         glm::mat4 projection = camera.getProjectionMatrix();
+
+        int currentLightIndex = 0;
+
+        // SPOT_LIGHT.getLight()->RenderLight(currentLightIndex,SPOT_LIGHT.getRotation(),SPOT_LIGHT.getPosition(),programID);
+        //DIRECTIONAL_LIGHT.getLight()->RenderLight(currentLightIndex,DIRECTIONAL_LIGHT.getRotation(),DIRECTIONAL_LIGHT.getPosition(),programID);
+        POINT_LIGHT.getLight()->RenderLight(currentLightIndex,POINT_LIGHT.getRotation(),POINT_LIGHT.getPosition(),programID);
+         AMBIENT_LIGHT.getLight()->RenderLight(currentLightIndex,AMBIENT_LIGHT.getRotation(),AMBIENT_LIGHT.getPosition(),programID);
+
+        GLuint numLightsID = glGetUniformLocation(programID, "numLights");
+        glUniform1i(numLightsID, currentLightIndex);
 
         CUBE.Draw(view,projection);
         TRIANGLE.Draw(view,projection);
