@@ -57,6 +57,14 @@ add_executable(${PROJECT_NAME}
         src/object/Object.h
         src/lights/Light.cpp
         src/lights/Light.h
+        src/meshes/Cylinder.cpp
+        src/meshes/Cylinder.h
+        src/meshes/Dodecahedron.cpp
+        src/meshes/Dodecahedron.h
+        src/meshes/Trapezohedron.cpp
+        src/meshes/Trapezohedron.h
+        src/meshes/Square.cpp
+        src/meshes/Square.h
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE include)

@@ -21,6 +21,16 @@ private:
     float maxDistance;
     float cutOff;
 
+    mutable int cachedIndex = -1;
+    mutable GLuint cachedProgramID = 0;
+    mutable GLuint locType;
+    mutable GLuint locPos;
+    mutable GLuint locDir;
+    mutable GLuint locCol;
+    mutable GLuint locPow;
+    mutable GLuint locDist;
+    mutable GLuint locCutOff;
+
 public:
     Light(LightType lightType = LightType::POINT, glm::vec3 col = glm::vec3(1.0f, 1.0f, 1.0f), float pow = 60.0f, float maxDist = 100.0f, float cutOffAngle = 12.5f);
 
@@ -36,7 +46,7 @@ public:
     [[nodiscard]] float getMaxDistance() const;
     [[nodiscard]] float getCutOff() const;
 
-    void RenderLight(int& currentLightIndex,glm::vec3 rotation,glm::vec3 position,GLuint programID);
+    void RenderLight(int& currentLightIndex, glm::vec3 rotation, glm::vec3 position, GLuint programID);
 
     void sendToShader(GLuint programID, const glm::vec3& worldPosition, const glm::vec3& worldDirection, int index) const;
 };

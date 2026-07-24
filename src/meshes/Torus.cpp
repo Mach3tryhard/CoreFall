@@ -42,8 +42,8 @@ Torus::Torus(std::shared_ptr<Material> mat, float mainRadius, float tubeRadius, 
             glm::vec3 p4 = getPosition(theta2, phi2);
 
             glm::vec3 n1 = glm::normalize(p1 - c1);
-            glm::vec3 n2 = glm::normalize(p2 - c1);
-            glm::vec3 n3 = glm::normalize(p3 - c2);
+            glm::vec3 n2 = glm::normalize(p2 - c2);
+            glm::vec3 n3 = glm::normalize(p3 - c1);
             glm::vec3 n4 = glm::normalize(p4 - c2);
 
             finalVertices.insert(finalVertices.end(), {p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, p3.x, p3.y, p3.z});

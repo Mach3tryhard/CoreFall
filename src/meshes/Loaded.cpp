@@ -20,6 +20,10 @@ bool Loaded::loadOBJ(const char *path) {
     std::vector<glm::vec2> pureUVs;
     std::vector<glm::vec3> pureNormals;
 
+    std::vector<glm::vec3> vertices;
+    std::vector<glm::vec2> uvs;
+    std::vector<glm::vec3> normals;
+
     std::string line;
     int lineCount = 0;
     while (std::getline(file, line)) {

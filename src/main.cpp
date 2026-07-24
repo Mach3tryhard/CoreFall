@@ -13,6 +13,10 @@
 #include "meshes/Sphere.h"
 #include "meshes/Torus.h"
 #include "object/Object.h"
+#include "meshes/Cylinder.h"
+#include "meshes/Dodecahedron.h"
+#include "meshes/Square.h"
+#include "meshes/Trapezohedron.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -32,6 +36,7 @@ int main() {
         return -1;
     }
     glfwMakeContextCurrent(window);
+    glfwSwapInterval(1);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -54,52 +59,66 @@ int main() {
     auto defaultMaterial = std::make_shared<Material>(programID, "textures/default.dds");
 
     auto trianglemesh = std::make_shared<Triangle>(defaultMaterial);
+    auto squaremesh = std::make_shared<Square>(defaultMaterial);
 
     auto sphereMesh = std::make_shared<Sphere>(defaultMaterial);
     auto torusMesh = std::make_shared<Torus>(defaultMaterial);
+    auto cylinderMesh = std::make_shared<Cylinder>(defaultMaterial);
 
     auto cubeMesh = std::make_shared<Cube>(defaultMaterial);
     auto tetrahedronMesh = std::make_shared<Tetrahedron>(defaultMaterial);
     auto octahedronMesh = std::make_shared<Octahedron>(defaultMaterial);
     auto icosahedronMesh = std::make_shared<Icosahedron>(defaultMaterial);
+    auto dodecahedronMesh = std::make_shared<Dodecahedron>(defaultMaterial);
+    auto trapezohedronMesh = std::make_shared<Trapezohedron>(defaultMaterial);
 
-    auto loadedMesh = std::make_shared<Loaded>(defaultMaterial);
-    loadedMesh->loadOBJ("models/monkey.obj");
 
-    auto pointLight = std::make_shared<Light>(LightType::POINT,glm::vec3(1.0f,1.0f,1.0f),80);
+    auto monkeyMesh = std::make_shared<Loaded>(defaultMaterial);
+    monkeyMesh->loadOBJ("models/monkey.obj");
+    auto meatballMesh = std::make_shared<Loaded>(defaultMaterial);
+    meatballMesh->loadOBJ("models/meatball.obj");
+
+    auto pointLight = std::make_shared<Light>(LightType::POINT,glm::vec3(1.0f,1.0f,1.0f),100);
     auto ambientalLight = std::make_shared<Light>(LightType::AMBIENT,glm::vec3(1.0f,1.0f,1.0f),0.2);
     auto spotLight = std::make_shared<Light>(LightType::SPOT,glm::vec3(1.0f,1.0f,1.0f),200);
     auto directionalLight = std::make_shared<Light>(LightType::DIRECTIONAL,glm::vec3(1.0f,1.0f,1.0f),1);
 
-    Object TRIANGLE(glm::vec3(2.5f,0.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    Object TRIANGLE(glm::vec3(0.0f,-5.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
     TRIANGLE.addMesh(trianglemesh);
+    Object SQUARE(glm::vec3(2.5f,-5.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    SQUARE.addMesh(squaremesh);
 
-    Object SPHERE(glm::vec3(5.0f,0.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    Object SPHERE(glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
     SPHERE.addMesh(sphereMesh);
-    Object TORUS(glm::vec3(7.5f,0.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    Object TORUS(glm::vec3(2.5f,0.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
     TORUS.addMesh(torusMesh);
+    Object CYLINDER(glm::vec3(5.0f,0.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    CYLINDER.addMesh(cylinderMesh);
 
-    Object CUBE(glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    Object CUBE(glm::vec3(0.0f,5.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
     CUBE.addMesh(cubeMesh);
-    Object TETRAHEDRON(glm::vec3(10.0f,0.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    Object TETRAHEDRON(glm::vec3(2.5f,5.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
     TETRAHEDRON.addMesh(tetrahedronMesh);
-    Object OCTAHEDRON(glm::vec3(0.0f,5.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    Object OCTAHEDRON(glm::vec3(5.0f,5.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
     OCTAHEDRON.addMesh(octahedronMesh);
-    Object ICOSAHEDRON(glm::vec3(2.5f,5.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    Object ICOSAHEDRON(glm::vec3(7.5f,5.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
     ICOSAHEDRON.addMesh(icosahedronMesh);
+    Object TRAPEZOHEDRON(glm::vec3(10.0f,5.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    TRAPEZOHEDRON.addMesh(trapezohedronMesh);
+    Object DODECAHEDRON(glm::vec3(12.5f,5.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    DODECAHEDRON.addMesh(dodecahedronMesh);
 
-    Object MONKEY(glm::vec3(5.0f,5.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
-    MONKEY.addMesh(loadedMesh);
+    Object MONKEY(glm::vec3(0.0f,10.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    MONKEY.addMesh(monkeyMesh);
+    Object MEATBALL(glm::vec3(5.0f,10.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    MEATBALL.addMesh(meatballMesh);
 
-    Object POINT_LIGHT(glm::vec3(5.0f,2.5f,10.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    Object POINT_LIGHT(glm::vec3(5.0f,5.0f,10.0f),glm::vec3(0.0f),glm::vec3(1.0f));
     POINT_LIGHT.addLight(pointLight);
-
     Object AMBIENT_LIGHT(glm::vec3(5.0f,5.0f,5.0f),glm::vec3(0.0f),glm::vec3(1.0f));
     AMBIENT_LIGHT.addLight(ambientalLight);
-
-    Object DIRECTIONAL_LIGHT(glm::vec3(5.0f,2.5f,10.0f),glm::vec3(1.0f),glm::vec3(1.0f));
+    Object DIRECTIONAL_LIGHT(glm::vec3(5.0f,2.5f,10.0f),glm::vec3(45.0f,0.0f,0.0f),glm::vec3(1.0f));
     DIRECTIONAL_LIGHT.addLight(directionalLight);
-
     Object SPOT_LIGHT(glm::vec3(5.0f,2.5f,30.0f),glm::vec3(0.0f),glm::vec3(1.0f));
     SPOT_LIGHT.addMesh(sphereMesh);
     SPOT_LIGHT.addLight(spotLight);
@@ -119,10 +138,10 @@ int main() {
 
         int currentLightIndex = 0;
 
-        // SPOT_LIGHT.getLight()->RenderLight(currentLightIndex,SPOT_LIGHT.getRotation(),SPOT_LIGHT.getPosition(),programID);
+        //SPOT_LIGHT.getLight()->RenderLight(currentLightIndex,SPOT_LIGHT.getRotation(),SPOT_LIGHT.getPosition(),programID);
         //DIRECTIONAL_LIGHT.getLight()->RenderLight(currentLightIndex,DIRECTIONAL_LIGHT.getRotation(),DIRECTIONAL_LIGHT.getPosition(),programID);
         POINT_LIGHT.getLight()->RenderLight(currentLightIndex,POINT_LIGHT.getRotation(),POINT_LIGHT.getPosition(),programID);
-         AMBIENT_LIGHT.getLight()->RenderLight(currentLightIndex,AMBIENT_LIGHT.getRotation(),AMBIENT_LIGHT.getPosition(),programID);
+        AMBIENT_LIGHT.getLight()->RenderLight(currentLightIndex,AMBIENT_LIGHT.getRotation(),AMBIENT_LIGHT.getPosition(),programID);
 
         GLuint numLightsID = glGetUniformLocation(programID, "numLights");
         glUniform1i(numLightsID, currentLightIndex);
@@ -135,6 +154,11 @@ int main() {
         OCTAHEDRON.Draw(view,projection);
         ICOSAHEDRON.Draw(view,projection);
         MONKEY.Draw(view,projection);
+        CYLINDER.Draw(view,projection);
+        TRAPEZOHEDRON.Draw(view,projection);
+        DODECAHEDRON.Draw(view,projection);
+        SQUARE.Draw(view,projection);
+        MEATBALL.Draw(view,projection);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
