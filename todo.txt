@@ -1,0 +1,6 @@
+scale
+transparency
+normal maps
+shadows
+collision
+rigidbody
