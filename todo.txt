@@ -1,4 +1,4 @@
-scale
+indices
 transparency
 normal maps
 shadows

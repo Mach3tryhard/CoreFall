@@ -3,10 +3,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <string>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 Material::Material(GLuint shaderProgram, const char* texturePath) {
     programID = shaderProgram;
-    textureID = loadDDS(texturePath);
+
+    std::string pathStr = texturePath;
+    if (pathStr.length() >= 4 && pathStr.substr(pathStr.length() - 4) == ".dds") {
+        textureID = loadDDS(texturePath);
+    } else {
+        textureID = loadStandardImage(texturePath);
+    }
 }
 
 Material::~Material() {
@@ -27,6 +37,35 @@ void Material::Bind() const {
 
 GLuint Material::getProgramID() const {
     return programID;
+}
+
+GLuint Material::loadStandardImage(const char * imagepath) {
+    GLuint newTextureID;
+    glGenTextures(1, &newTextureID);
+    glBindTexture(GL_TEXTURE_2D, newTextureID);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    stbi_set_flip_vertically_on_load(true);
+
+    int width, height, nrChannels;
+    unsigned char *data = stbi_load(imagepath, &width, &height, &nrChannels, 0);
+
+    if (data) {
+        GLenum format = GL_RGB;
+        if (nrChannels == 1) format = GL_RED;
+        else if (nrChannels == 3) format = GL_RGB;
+        else if (nrChannels == 4) format = GL_RGBA;
+
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+
+    stbi_image_free(data);
+    return newTextureID;
 }
 
 GLuint Material::loadDDS(const char * imagepath) {

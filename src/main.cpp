@@ -77,6 +77,9 @@ int main() {
     monkeyMesh->loadOBJ("models/monkey.obj");
     auto meatballMesh = std::make_shared<Loaded>(defaultMaterial);
     meatballMesh->loadOBJ("models/meatball.obj");
+    auto cakeMaterial = std::make_shared<Material>(programID, "textures/cake.jpg");
+    auto cakeMesh = std::make_shared<Loaded>(cakeMaterial);
+    cakeMesh->loadOBJ("models/carrot_cake.obj");
 
     auto pointLight = std::make_shared<Light>(LightType::POINT,glm::vec3(1.0f,1.0f,1.0f),100);
     auto ambientalLight = std::make_shared<Light>(LightType::AMBIENT,glm::vec3(1.0f,1.0f,1.0f),0.2);
@@ -112,8 +115,10 @@ int main() {
     MONKEY.addMesh(monkeyMesh);
     Object MEATBALL(glm::vec3(5.0f,10.0f,0.0f),glm::vec3(0.0f),glm::vec3(1.0f));
     MEATBALL.addMesh(meatballMesh);
+    Object CAKE(glm::vec3(10.0f,10.0f,0.0f),glm::vec3(0.0f),glm::vec3(0.1f));
+    CAKE.addMesh(cakeMesh);
 
-    Object POINT_LIGHT(glm::vec3(5.0f,5.0f,10.0f),glm::vec3(0.0f),glm::vec3(1.0f));
+    Object POINT_LIGHT(glm::vec3(5.0f,12.0f,10.0f),glm::vec3(0.0f),glm::vec3(1.0f));
     POINT_LIGHT.addLight(pointLight);
     Object AMBIENT_LIGHT(glm::vec3(5.0f,5.0f,5.0f),glm::vec3(0.0f),glm::vec3(1.0f));
     AMBIENT_LIGHT.addLight(ambientalLight);
@@ -159,6 +164,7 @@ int main() {
         DODECAHEDRON.Draw(view,projection);
         SQUARE.Draw(view,projection);
         MEATBALL.Draw(view,projection);
+        CAKE.Draw(view,projection);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

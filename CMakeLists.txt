@@ -28,7 +28,7 @@ FetchContent_MakeAvailable(glm)
 
 add_executable(${PROJECT_NAME}
         src/main.cpp
-        src/glad.c
+        src/glad.cpp
         src/LoadShader.cpp
         src/LoadShader.h
         src/meshes/Triangle.cpp

@@ -22,12 +22,12 @@ public:
     ~Material();
 
     GLuint loadDDS(const char* imagepath);
+    GLuint loadStandardImage(const char * imagepath);
     Material(const Material&) = delete;
     Material& operator=(const Material&) = delete;
 
     void Bind() const;
-
-    GLuint getProgramID() const;
+    [[nodiscard]] GLuint getProgramID() const;
 };
 
 #endif //COREFALL_MATERIAL_H
